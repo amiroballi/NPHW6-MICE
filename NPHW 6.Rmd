@@ -1,0 +1,229 @@
+---
+title: "NPHW 6"
+author: "Alec Miroballi"
+date: "4/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+```{r}
+library(Hmisc)
+library(rlang)
+library(mice)
+library(VIM)
+library(norm)
+dat=read.csv("ill_school_data.csv")
+#Replace blank spaces with NA
+dat<-replace(dat, dat=="",NA)
+dat_omit<-na.omit(dat)
+chisq.test(dat_omit$Handed,dat_omit$Favorite_Season)
+
+```
+Hypothesis Testing:
+
+H0: Handedness and Favorite Season are indepedent of one another.
+
+HA: Handedness and Favorite Season are dependent of one another. 
+
+
+The data describes USA teenagers aged from 14-18 in 9-12 grade with various facts like foot length, favorite season, handedness, etc. It consist of both categorical and numerical data. It seems to have missing data and some misrepresented values recorded in various columns.
+I think its okay to remove the blank responses only for this specific question because its qualitative data and the missingness among these two is higher in the favorite season rather handedness. So, removing the rows of data with missing favorite season data will have a little to no change in the measuring of the  relationship between favorite season and handedness. I chose the chi square test because we are trying to test whether or not these two categorical variables are dependent or not in which the chi square test measures. 
+p= .7217 
+
+Because the p value > .05, we fail to reject the null hypothesis. We have insignificant evidence to suggest handedness and favorite are dependent. 
+
+
+
+```{r}
+
+#Cleaning height data
+dat$Height_cm<as.numeric(as.character(dat$Height_cm))
+dat$Height_cm[dat$Height_cm=="166cm"]<-"166"
+dat$Height_cm[dat$Height_cm=="2-May"]<-"NA"
+dat$Height_cm[dat$Height_cm=="1.8"]<-"NA"
+dat$Height_cm[dat$Height_cm=="10"]<-"NA"
+dat$Height_cm[dat$Height_cm=="999"]<-"NA"
+dat$Height_cm[dat$Height_cm=="99999"]<-"NA"
+dat$Height_cm[dat$Height_cm=="160cm"]<-"160"
+dat$Height_cm[dat$Height_cm=="12.7"]<-"NA"
+dat$Height_cm[dat$Height_cm=="5"]<-"NA"
+dat$Height_cm[dat$Height_cm=="6'0"]<-"182.9"
+dat$Height_cm[dat$Height_cm=="5.2"]<-"NA"
+dat$Height_cm[dat$Height_cm=="26"]<-"NA"
+dat$Height_cm[dat$Height_cm=="5'5"]<-"165.1"
+dat$Height_cm[dat$Height_cm=="5'3"]<-"160.02"
+dat$Height_cm[dat$Height_cm=="176cm"]<-"176"
+dat$Height_cm[dat$Height_cm=="12"]<-"NA"
+dat$Height_cm[dat$Height_cm=="180cm"]<-"180"
+dat$Height_cm[dat$Height_cm=="5'2"]<-"152.4"
+dat$Height_cm[dat$Height_cm=="64"]<-"NA"
+dat$Height_cm[dat$Height_cm=="60"]<-"NA"
+dat$Height_cm[dat$Height_cm=="330"]<-"NA"
+dat$Height_cm[dat$Height_cm=="69"]<-"NA"
+dat$Height_cm[dat$Height_cm=="98"]<-"NA"
+dat$Height_cm[dat$Height_cm=="63.5"]<-"NA"
+dat$Height_cm[dat$Height_cm=="68"]<-"NA"
+dat$Height_cm[dat$Height_cm=="63"]<-"NA"
+dat$Height_cm[dat$Height_cm=="58"]<-"NA"
+dat$Height_cm[dat$Height_cm=="71"]<-"NA"
+dat$Height_cm[dat$Height_cm=="70"]<-"NA"
+dat$Height_cm[dat$Height_cm=="61.5"]<-"NA"
+dat$Height_cm[dat$Height_cm=="54"]<-"NA"
+dat$Height_cm[dat$Height_cm=="80"]<-"NA"
+dat$Height_cm[dat$Height_cm=="75"]<-"NA"
+dat$Height_cm[dat$Height_cm=="60"]<-"NA"
+dat$Height_cm[dat$Height_cm=="59.25"]<-"NA"
+dat$Height_cm[dat$Height_cm=="75.6"]<-"NA"
+dat$Height_cm[dat$Height_cm=="57"]<-"NA"
+dat$Height_cm[dat$Height_cm=="73"]<-"NA"
+dat$Height_cm[dat$Height_cm=="78.4"]<-"NA"
+dat$Height_cm[dat$Height_cm=="72"]<-"NA"
+dat$Height_cm
+
+#Clean arm span data
+dat$Armspan_cm[dat$Armspan_cm=="58"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="75"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="60"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="65"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="1.88"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="71"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="70"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="69"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="67"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="5"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="152cm"]<-"152"
+dat$Armspan_cm[dat$Armspan_cm=="64"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="61"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="99"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="72"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="90"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="78"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="63"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="68"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="55"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="20"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="idk"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="3'0"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="40.2"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="30"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="69"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="431.8"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="44"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="50"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="9.5"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="36"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="180cm"]<-"180"
+dat$Armspan_cm[dat$Armspan_cm=="48"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="59.8"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="12"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="71"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="176cm"]<-"176"
+dat$Armspan_cm[dat$Armspan_cm=="23"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="73"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="76"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="74"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="47"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="53"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="85"]<-"NA"
+dat$Armspan_cm[dat$Armspan_cm=="79"]<-"NA"
+dat$Armspan_cm
+
+
+#Clean age data
+dat$Ageyears<-(as.numeric(dat$Ageyears))
+dat$Ageyears
+dat$Ageyears[dat$Ageyears=="13"]<-"NA"
+dat$Ageyears[dat$Ageyears=="99"]<-"NA"
+dat$Ageyears[dat$Ageyears=="32"]<-"NA"
+dat$Ageyears[dat$Ageyears=="40"]<-"NA"
+dat$Ageyears<-as.numeric(dat$Ageyears)
+dat$Ageyears
+
+#Cleaning Foot Data
+dat$Footlength_cm[dat$Footlength_cm=="90"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="152"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="18"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="8"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="9.5"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="9"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="12"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="19"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="2"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="154.5"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="152.4"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="9.6"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="17.78"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="7"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="5.5"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="23cm"]<-"23"
+dat$Footlength_cm[dat$Footlength_cm=="70"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="25cm"]<-"25"
+dat$Footlength_cm[dat$Footlength_cm=="8 1/2"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="9.9"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="2426"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="11.5"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="15.24"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="3'0"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="57"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="15"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="108"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="13"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="90"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="30 cm"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="17.5"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="36"]<-"NA"
+dat$Footlength_cm[dat$Footlength_cm=="10"]<-"NA"
+dat$Footlength_cm
+
+#Imputing with mice function cart method
+mids<-mice(dat[,c("Armspan_cm", "Ageyears", "Height_cm","Footlength_cm")], m = 5, method="cart")
+imp <- list()
+for(i in 1:5){
+imp[[i]] <- complete(mids,i)
+}
+
+#Creating beta list and se list for cart method imputation
+betaList<-seList<-list() 
+for (i in 1:5){ 
+betaList[[i]]<-summary(lm(as.numeric(Height_cm)~as.numeric(Armspan_cm)+as.numeric(Ageyears)+as.numeric(Footlength_cm),data=as.data.frame(imp[[i]])))$coefficients[,1] 
+seList[[i]]<-summary(lm(as.numeric(Height_cm)~as.numeric(Armspan_cm)+as.numeric(Ageyears)+as.numeric(Footlength_cm),data=as.data.frame(imp[[i]])))$coefficients[,2] }
+
+#Rubin estimates with cart model
+mi.inference(betaList,seList)
+
+
+dat$Ageyears<-as.numeric(dat$Ageyears)
+dat$Height_cm<-as.numeric(dat$Height_cm)
+dat$Footlength_cm<-as.numeric(dat$Footlength_cm)
+dat$Armspan_cm<-as.numeric(dat$Armspan_cm)
+
+#Rf method mice imputation
+mids1<-mice((dat[,c("Armspan_cm", "Ageyears", "Height_cm","Footlength_cm")]), method="rf", ntree=3)
+imp1 <- list()
+for(i in 1:5){
+imp1[[i]] <- complete(mids1,i)
+}
+
+#Rf imputation beta and se list
+betaList1<-seList1<-list() 
+for (i in 1:5){ 
+betaList1[[i]]<-summary(lm(as.numeric(Height_cm)~as.numeric(Armspan_cm)+as.numeric(Ageyears)+as.numeric(Footlength_cm),data=as.data.frame(imp1[[i]])))$coefficients[,1] 
+seList1[[i]]<-summary(lm(as.numeric(Height_cm)~as.numeric(Armspan_cm)+as.numeric(Ageyears)+as.numeric(Footlength_cm),data=as.data.frame(imp1[[i]])))$coefficients[,2] }
+
+#Rubin estimates
+mi.inference(betaList1,seList1)
+
+
+
+```
+
+
+```{r}
+
+```
+
